@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'frasquito'
 app.config['MYSQL_PASSWORD'] = 'XVOUf8aAh6rZjO6FKnE0'
-app.config['MYSQL_DB'] = 'flaskcontacts'
+app.config['MYSQL_DB'] = 'quedelibros'
 mysql = MySQL(app)
 
 # Settings
@@ -16,55 +16,64 @@ app.secret_key = 'mysecretkey'
 @app.route('/')
 def Index():
   cur = mysql.connection.cursor()
-  cur.execute('SELECT * FROM contacts')
+  cur.execute('SELECT * FROM books')
   data = cur.fetchall()
-  return render_template('index.html', contacts = data)
+  return render_template('index.html', books = data)
 
-@app.route('/add_contact', methods=['POST'])
-def add_contact():
+@app.route('/add_book', methods=['POST'])
+def add_book():
   if request.method =='POST':
-    fullname = request.form['fullname']
-    phone = request.form['phone']
-    email = request.form['email']
+    booktitle = request.form['booktitle']
+    author = request.form['author']
+    genre = request.form['genre']
+    startdate = request.form['startdate']
+    enddate = request.form['enddate']
+    score = request.form['score']
     cur = mysql.connection.cursor()
-    cur.execute('INSERT INTO contacts (fullname, phone, email) VALUES (%s, %s, %s)', (fullname, phone, email))
+    cur.execute('INSERT INTO books (booktitle, author, genre, startdate, enddate, score) VALUES (%s, %s, %s, %s, %s, %s)', (booktitle, author, genre, startdate, enddate, score))
     mysql.connection.commit()
-    flash('Contact added successfuly')
+    flash('Se añadió un nuevo libro')
     return redirect(url_for('Index'))
 
 @app.route('/edit/<id>')
-def get_contact(id):
+def get_book(id):
     cur = mysql.connection.cursor()
-    cur.execute('SELECT * FROM contacts WHERE id = %s', (id))
+    cur.execute('SELECT * FROM books WHERE id = %s', (id))
     data = cur.fetchall()
-    return render_template('edit-contact.html', contact = data[0])
+    return render_template('edit-book.html', book = data[0])
 
 @app.route('/update/<id>', methods = ['POST'])
-def update_contact(id):
+def update_book(id):
     if request.method == 'POST':
-      fullname = request.form['fullname']
-      phone = request.form['phone']
-      email = request.form['email']
+      booktitle = request.form['booktitle']
+      author = request.form['author']
+      genre = request.form['genre']
+      startdate = request.form['startdate']
+      enddate = request.form['enddate']
+      score = request.form['score']
       cur = mysql.connection.cursor()
       cur.execute("""
-        UPDATE contacts
-        SET fullname = %s,
-            email = %s,
-            phone = %s
+        UPDATE books
+        SET booktitle = %s,
+            author = %s,
+            genre = %s,
+            startdate = %s,
+            enddate = %s,
+            score = %s
         WHERE id = %s
-        """, (fullname, email, phone, id))
+        """, (booktitle, author, genre, startdate, enddate, score, id))
       mysql.connection.commit()
-      flash('Contact Updated Successfully')
+      flash('Se han actualizado los datos del libro')
       return redirect(url_for('Index'))
 
 
 @app.route('/delete/<string:id>')
-def delete_contact(id):
+def delete_book(id):
   cur = mysql.connection.cursor()
-  cur.execute('DELETE FROM contacts WHERE id = {0}'.format(id))
+  cur.execute('DELETE FROM books WHERE id = {0}'.format(id))
   mysql.connection.commit()
-  flash('Contact removed successfuly')
+  flash('Se ha eliminado el libro')
   return redirect(url_for('Index'))
 
 if __name__ == '__main__':
-  app.run(port = 3000, debug =  True)
+  app.run(port = 3020, debug =  True)

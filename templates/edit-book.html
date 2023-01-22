@@ -3,18 +3,27 @@
 {% block body %}
 <div class="col-md-4 offset-md-4">
     <div class="card card-body">
-        <form action="/update/{{contact.0}}" method="POST">
+        <form action="/update/{{book.0}}" method="POST">
             <div class="form-group">
-                <input type="text" name="fullname" placeholder="Fullname" value="{{contact.1}}" class="form-control">
+                <input type="text" name="booktitle" placeholder="Título" value="{{book.1}}" class="form-control">
             </div>
             <div class="form-group">
-                <input type="text" name="phone" placeholder="Phone" value="{{contact.2}}" class="form-control">
+                <input type="text" name="author" placeholder="Autor" value="{{book.2}}" class="form-control">
             </div>
             <div class="form-group">
-                <input type="text" name="email" placeholder="Email" value="{{contact.3}}" class="form-control">
+                <input type="text" name="genre" placeholder="Género" value="{{book.3}}" class="form-control">
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-success btn-block form-control">Save</button>
+                <input type="text" name="startdate" placeholder="Fecha de inicio" value="{{book.4}}" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="text" name="enddate" placeholder="Fecha de fin" value="{{book.5}}" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="text" name="score" placeholder="Puntuación" value="{{book.6}}" class="form-control">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success btn-block form-control">Guardar</button>
             </div>
         </form>        
     </div>
